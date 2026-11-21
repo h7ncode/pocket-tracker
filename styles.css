@@ -1,0 +1,237 @@
+/* ============================================================
+   Pocket Money Tracker - styles
+   Mobile-first, text only, no icons or images.
+   ============================================================ */
+
+:root {
+  --bg: #f3f4f6;
+  --card: #ffffff;
+  --text: #1f2937;
+  --muted: #6b7280;
+  --border: #d1d5db;
+  --accent: #1d4ed8;
+  --ok: #15803d;
+  --warn: #d97706;
+  --low: #dc2626;
+}
+
+/* Make the HTML "hidden" attribute always win over display rules */
+[hidden] { display: none !important; }
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  line-height: 1.5;
+  color: var(--text);
+  background: var(--bg);
+  transition: background 0.3s ease;
+}
+
+/* NEGATIVE BALANCE STATE: whole viewport turns red */
+body.danger { background: #b91c1c; }
+
+#app {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+/* ---------- Cards ---------- */
+.card {
+  background: var(--card);
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 14px;
+  border: 1px solid var(--border);
+}
+
+h1 { font-size: 1.4rem; margin: 0 0 4px; }
+h2 { font-size: 1.1rem; margin: 0 0 10px; }
+
+.muted { color: var(--muted); margin: 0 0 10px; }
+.small { font-size: 0.85rem; margin-top: 8px; }
+
+.label { font-size: 0.8rem; color: var(--muted); margin: 0; }
+
+/* ---------- Danger banner ---------- */
+.danger-banner {
+  border: 3px solid #7f1d1d;
+  color: #7f1d1d;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* ---------- Forms ---------- */
+label { display: block; margin: 12px 0 4px; font-size: 0.9rem; font-weight: 600; }
+label.inline { display: inline-block; margin-right: 14px; font-weight: 400; }
+label.check { display: block; margin-top: 14px; }
+
+input[type="text"],
+input[type="number"],
+input[type="date"],
+input[type="month"],
+textarea {
+  width: 100%;
+  padding: 10px;
+  font: inherit;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--text);
+}
+
+textarea { resize: vertical; }
+
+fieldset { border: 1px solid var(--border); border-radius: 6px; margin: 12px 0 0; padding: 8px 12px; }
+legend { font-size: 0.9rem; font-weight: 600; padding: 0 4px; }
+
+.error { color: #b91c1c; font-weight: 600; margin: 10px 0 0; }
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: block;
+  width: 100%;
+  margin-top: 14px;
+  padding: 12px;
+  font: inherit;
+  font-weight: 600;
+  color: #fff;
+  background: var(--accent);
+  border: 0;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.btn:hover { opacity: 0.92; }
+.btn-secondary { background: #374151; }
+.btn-danger { background: #b91c1c; }
+
+.btn-small {
+  padding: 4px 10px;
+  font: inherit;
+  font-size: 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #fff;
+  color: #b91c1c;
+  cursor: pointer;
+}
+
+/* ---------- Goal + progress bar ---------- */
+.goal-title { font-size: 1.3rem; font-weight: 700; margin: 2px 0 10px; }
+
+.progress {
+  width: 100%;
+  height: 22px;
+  background: #e5e7eb;
+  border-radius: 11px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0;
+  background: var(--ok);
+  transition: width 0.4s ease, background 0.3s ease;
+}
+.progress-fill.warn { background: var(--warn); }
+.progress-fill.low  { background: var(--low); }
+
+#progressLabel { margin-top: 8px; margin-bottom: 0; }
+
+/* ---------- Summary ---------- */
+.summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.value { font-size: 1.15rem; font-weight: 700; margin: 0; }
+.value.negative { color: #b91c1c; }
+
+/* ---------- Lists ---------- */
+.list { list-style: none; margin: 0; padding: 0; }
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+.row:last-child { border-bottom: 0; }
+
+.row-info { display: flex; flex-direction: column; gap: 2px; min-width: 0; word-break: break-word; }
+.row-actions { display: flex; align-items: center; gap: 10px; white-space: nowrap; }
+.meta { font-size: 0.8rem; color: var(--muted); }
+.amount { font-weight: 700; }
+.empty { color: var(--muted); padding: 6px 0; }
+
+.tag {
+  display: inline-block;
+  align-self: flex-start;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 1px 8px;
+  border-radius: 10px;
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* ---------- Modals ---------- */
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.6);
+  overflow-y: auto;
+}
+
+.modal-box {
+  width: 100%;
+  max-width: 440px;
+  max-height: 100%;
+  overflow-y: auto;
+  background: #fff;
+  border-radius: 10px;
+  padding: 18px;
+}
+
+blockquote {
+  margin: 12px 0;
+  padding: 12px 14px;
+  border-left: 4px solid var(--accent);
+  background: #eff6ff;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-size: 1.05rem;
+}
+
+/* ---------- Print report ---------- */
+/* Hidden on screen; shown only when printing */
+#printReport { display: none; }
+
+#printReport h1 { font-size: 1.6rem; margin-bottom: 12px; }
+#printReport h2 { margin-top: 20px; }
+#printReport table { width: 100%; border-collapse: collapse; margin-bottom: 8px; }
+#printReport th,
+#printReport td { border: 1px solid #999; padding: 6px 8px; text-align: left; font-size: 0.9rem; }
+#printReport th { background: #eee; }
+#printReport .num { text-align: right; }
+#printReport .report-note { font-size: 0.8rem; color: #555; margin-top: 24px; }
+
+@media print {
+  /* Hide everything except the report */
+  #app,
+  .modal { display: none !important; }
+
+  #printReport { display: block; }
+
+  /* Remove the red warning theme so the PDF stays clean */
+  body,
+  body.danger {
+    background: #fff !important;
+    color: #000;
+  }
+}

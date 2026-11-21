@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pocket Money Tracker</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <main id="app">
+
+    <!-- ============ SCREEN A: ONBOARDING (first visit only) ============ -->
+    <section id="onboarding" hidden>
+      <div class="card">
+        <h1>Pocket Money Tracker</h1>
+        <p class="muted">Set up once. Everything stays on this device.</p>
+
+        <form id="onboardingForm" novalidate>
+          <label for="obName">Your name</label>
+          <input id="obName" type="text" maxlength="40" required>
+
+          <fieldset>
+            <legend>How often do you get pocket money?</legend>
+            <label class="inline"><input type="radio" name="obFrequency" value="monthly" checked> Monthly</label>
+            <label class="inline"><input type="radio" name="obFrequency" value="weekly"> Weekly</label>
+            <label class="inline"><input type="radio" name="obFrequency" value="daily"> Daily</label>
+          </fieldset>
+
+          <label for="obAmount">Allowance amount (Rs)</label>
+          <input id="obAmount" type="number" min="1" step="any" inputmode="decimal" required>
+
+          <label for="obGoal">What are you saving for?</label>
+          <input id="obGoal" type="text" maxlength="60" placeholder="e.g. New Mobile, Bike, Trip" required>
+
+          <label for="obLetter">What do you want to say to yourself 6 months from now?</label>
+          <textarea id="obLetter" rows="4" maxlength="500" placeholder="e.g. Bro, please buy that bike."></textarea>
+
+          <p id="obError" class="error" hidden></p>
+          <button type="submit" class="btn">Start</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- ============ SCREEN B: DASHBOARD ============ -->
+    <section id="dashboard" hidden>
+
+      <!-- Header -->
+      <div class="card">
+        <h1>Pocket Money Tracker</h1>
+        <p id="greeting" class="muted"></p>
+        <button type="button" id="editProfileBtn" class="btn btn-secondary">Edit Profile, Goal &amp; Letter</button>
+      </div>
+
+      <!-- Negative balance warning (shown only when balance < 0) -->
+      <div id="dangerBanner" class="card danger-banner" role="alert" hidden></div>
+
+      <!-- Goal tracker (text + progress bar only) -->
+      <div class="card">
+        <p class="label">Saving for</p>
+        <p id="goalTitle" class="goal-title"></p>
+        <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progressTrack">
+          <div id="progressFill" class="progress-fill"></div>
+        </div>
+        <p id="progressLabel" class="muted"></p>
+      </div>
+
+      <!-- Summary -->
+      <div class="card">
+        <h2 id="monthTitle"></h2>
+        <div class="summary-grid">
+          <div><p class="label">Total Pocket Money</p><p id="sumPocket" class="value">0</p></div>
+          <div><p class="label">Total Expenses</p><p id="sumExpenses" class="value">0</p></div>
+          <div><p class="label">Impulsive Expenses</p><p id="sumImpulsive" class="value">0</p></div>
+          <div><p class="label">Remaining Balance</p><p id="sumBalance" class="value">0</p></div>
+        </div>
+      </div>
+
+      <!-- Add pocket money -->
+      <div class="card">
+        <h2>Add Pocket Money</h2>
+        <p id="allowanceHint" class="muted"></p>
+        <form id="incomeForm" novalidate>
+          <label for="incAmount">Amount (Rs)</label>
+          <input id="incAmount" type="number" min="1" step="any" inputmode="decimal" required>
+          <label for="incDate">Date</label>
+          <input id="incDate" type="date" required>
+          <label for="incNote">Note (optional)</label>
+          <input id="incNote" type="text" maxlength="60" placeholder="e.g. Weekly top-up">
+          <p id="incError" class="error" hidden></p>
+          <button type="submit" class="btn">Add Pocket Money</button>
+        </form>
+      </div>
+
+      <!-- Add expense -->
+      <div class="card">
+        <h2>Add Expense</h2>
+        <form id="expenseForm" novalidate>
+          <label for="expAmount">Amount (Rs)</label>
+          <input id="expAmount" type="number" min="1" step="any" inputmode="decimal" required>
+          <label for="expDesc">Description / Category</label>
+          <input id="expDesc" type="text" maxlength="60" placeholder="e.g. Snacks, Transport" required>
+          <label for="expDate">Date</label>
+          <input id="expDate" type="date" required>
+          <label class="inline check">
+            <input id="expImpulsive" type="checkbox"> Impulsive / Non-essential
+          </label>
+          <p id="expError" class="error" hidden></p>
+          <button type="submit" class="btn">Add Expense</button>
+        </form>
+      </div>
+
+      <!-- Expense list -->
+      <div class="card">
+        <h2>Expenses This Month</h2>
+        <ul id="expenseList" class="list"></ul>
+      </div>
+
+      <!-- Income list -->
+      <div class="card">
+        <h2>Pocket Money Added This Month</h2>
+        <ul id="incomeList" class="list"></ul>
+      </div>
+
+      <!-- Monthly report -->
+      <div class="card">
+        <h2>Monthly Report</h2>
+        <label for="reportMonth">Choose month</label>
+        <input id="reportMonth" type="month">
+        <button type="button" id="downloadReportBtn" class="btn">Download Monthly Report</button>
+        <p class="muted small">Opens the print dialog. Choose "Save as PDF" as the destination.</p>
+      </div>
+
+    </section>
+  </main>
+
+  <!-- ============ LETTER TO FUTURE SELF MODAL ============ -->
+  <div id="letterModal" class="modal" hidden>
+    <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="letterHeading">
+      <h2 id="letterHeading">A note from you, 6 months ago</h2>
+      <p id="letterContext" class="muted"></p>
+      <blockquote id="letterText"></blockquote>
+      <button type="button" id="letterCloseBtn" class="btn">I'll think again</button>
+    </div>
+  </div>
+
+  <!-- ============ EDIT PROFILE MODAL ============ -->
+  <div id="profileModal" class="modal" hidden>
+    <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="profileHeading">
+      <h2 id="profileHeading">Edit Profile</h2>
+      <form id="profileForm" novalidate>
+        <label for="pfName">Your name</label>
+        <input id="pfName" type="text" maxlength="40" required>
+
+        <fieldset>
+          <legend>Allowance frequency</legend>
+          <label class="inline"><input type="radio" name="pfFrequency" value="monthly"> Monthly</label>
+          <label class="inline"><input type="radio" name="pfFrequency" value="weekly"> Weekly</label>
+          <label class="inline"><input type="radio" name="pfFrequency" value="daily"> Daily</label>
+        </fieldset>
+
+        <label for="pfAmount">Allowance amount (Rs)</label>
+        <input id="pfAmount" type="number" min="1" step="any" inputmode="decimal" required>
+
+        <label for="pfGoal">Saving goal</label>
+        <input id="pfGoal" type="text" maxlength="60" required>
+
+        <label for="pfLetter">Letter to future self</label>
+        <textarea id="pfLetter" rows="4" maxlength="500"></textarea>
+
+        <p id="pfError" class="error" hidden></p>
+        <button type="submit" class="btn">Save</button>
+        <button type="button" id="profileCancelBtn" class="btn btn-secondary">Cancel</button>
+        <button type="button" id="resetBtn" class="btn btn-danger">Erase All Data</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============ PRINT-ONLY REPORT (filled by buildReport) ============ -->
+  <section id="printReport"></section>
+
+  <script src="app.js"></script>
+</body>
+</html>
