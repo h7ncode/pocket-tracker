@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Pocket Money Tracker</title>
+  <link rel="icon" href="img/" sizes="any">
+  <link rel="icon" href="img\logo.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css">
-      <link href="https://cdn.jsdelivr.net/npm/remixicon@4.9.0/fonts/remixicon.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.9.0/fonts/remixicon.css" rel="stylesheet" />
 </head>
+
 <body>
 
   <!-- ============ ONBOARDING (first visit only, no header or tabs) ============ -->
@@ -49,7 +53,7 @@
     <header id="appHeader">
       <h1>Pocket Money Tracker</h1>
       <button type="button" id="settingsBtn" class="icon-btn" aria-label="Settings" title="Settings">
-     <i class="ri-settings-4-fill gear-icon"></i>
+        <i class="ri-settings-4-fill gear-icon"></i>
       </button>
     </header>
 
@@ -82,7 +86,8 @@
 
           <!-- Shown once a target exists -->
           <div id="goalProgress" hidden>
-            <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progressTrack">
+            <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"
+              id="progressTrack">
               <div id="progressFill" class="progress-fill"></div>
             </div>
             <p id="progressLabel" class="muted"></p>
@@ -239,4 +244,5 @@
 
   <script src="app.js"></script>
 </body>
+
 </html>
