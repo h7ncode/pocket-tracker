@@ -78,6 +78,10 @@ hr { border: 0; border-top: 1px solid currentColor; margin: 18px 0; opacity: 0.4
   cursor: pointer;
 }
 
+.gear-icon{
+  font-size: x-large;
+}
+
 /* ---------- Danger banner ---------- */
 .danger-banner {
   padding: 12px 16px;
@@ -255,7 +259,6 @@ legend { font-size: 0.9rem; font-weight: 600; padding: 0 4px; }
   border-left: 1px solid var(--fg);
   cursor: pointer;
 }
-#tabBar button:first-child { border-left: 0; }
 
 /* Active tab is inverted: black with white text (or the reverse in danger mode) */
 #tabBar button.active { color: var(--bg); background: var(--fg); }
