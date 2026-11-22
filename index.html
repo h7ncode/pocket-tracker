@@ -8,171 +8,240 @@
 </head>
 <body>
 
-  <main id="app">
+  <!-- ============ ONBOARDING (first visit only, no header or tabs) ============ -->
+  <main id="onboarding" class="page" hidden>
+    <h1>Pocket Money Tracker</h1>
+    <p class="muted">Set up once. Everything stays on this device.</p>
 
-    <!-- ============ SCREEN A: ONBOARDING (first visit only) ============ -->
-    <section id="onboarding" hidden>
-      <div class="card">
-        <h1>Pocket Money Tracker</h1>
-        <p class="muted">Set up once. Everything stays on this device.</p>
+    <form id="onboardingForm" novalidate>
+      <label for="obName">Your name</label>
+      <input id="obName" type="text" maxlength="40" required>
 
-        <form id="onboardingForm" novalidate>
-          <label for="obName">Your name</label>
-          <input id="obName" type="text" maxlength="40" required>
+      <fieldset>
+        <legend>How often do you get pocket money?</legend>
+        <label class="inline"><input type="radio" name="obFrequency" value="monthly" checked> Monthly</label>
+        <label class="inline"><input type="radio" name="obFrequency" value="weekly"> Weekly</label>
+        <label class="inline"><input type="radio" name="obFrequency" value="daily"> Daily</label>
+      </fieldset>
 
-          <fieldset>
-            <legend>How often do you get pocket money?</legend>
-            <label class="inline"><input type="radio" name="obFrequency" value="monthly" checked> Monthly</label>
-            <label class="inline"><input type="radio" name="obFrequency" value="weekly"> Weekly</label>
-            <label class="inline"><input type="radio" name="obFrequency" value="daily"> Daily</label>
-          </fieldset>
+      <label for="obAmount">Allowance amount (Rs)</label>
+      <input id="obAmount" type="number" min="1" step="any" inputmode="decimal" required>
 
-          <label for="obAmount">Allowance amount (Rs)</label>
-          <input id="obAmount" type="number" min="1" step="any" inputmode="decimal" required>
+      <label for="obGoal">What are you saving for?</label>
+      <input id="obGoal" type="text" maxlength="60" placeholder="e.g. New Mobile, Bike, Trip" required>
 
-          <label for="obGoal">What are you saving for?</label>
-          <input id="obGoal" type="text" maxlength="60" placeholder="e.g. New Mobile, Bike, Trip" required>
+      <label for="obTarget">How much do you want to save for it? (Rs)</label>
+      <input id="obTarget" type="number" min="1" step="any" inputmode="decimal" required>
 
-          <label for="obLetter">What do you want to say to yourself 6 months from now?</label>
-          <textarea id="obLetter" rows="4" maxlength="500" placeholder="e.g. Bro, please buy that bike."></textarea>
+      <label for="obLetter">What do you want to say to yourself 6 months from now?</label>
+      <textarea id="obLetter" rows="4" maxlength="500" placeholder="e.g. Bro, please buy that bike."></textarea>
 
-          <p id="obError" class="error" hidden></p>
-          <button type="submit" class="btn">Start</button>
-        </form>
-      </div>
-    </section>
-
-    <!-- ============ SCREEN B: DASHBOARD ============ -->
-    <section id="dashboard" hidden>
-
-      <!-- Header -->
-      <div class="card">
-        <h1>Pocket Money Tracker</h1>
-        <p id="greeting" class="muted"></p>
-        <button type="button" id="editProfileBtn" class="btn btn-secondary">Edit Profile, Goal &amp; Letter</button>
-      </div>
-
-      <!-- Negative balance warning (shown only when balance < 0) -->
-      <div id="dangerBanner" class="card danger-banner" role="alert" hidden></div>
-
-      <!-- Goal tracker (text + progress bar only) -->
-      <div class="card">
-        <p class="label">Saving for</p>
-        <p id="goalTitle" class="goal-title"></p>
-        <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progressTrack">
-          <div id="progressFill" class="progress-fill"></div>
-        </div>
-        <p id="progressLabel" class="muted"></p>
-      </div>
-
-      <!-- Summary -->
-      <div class="card">
-        <h2 id="monthTitle"></h2>
-        <div class="summary-grid">
-          <div><p class="label">Total Pocket Money</p><p id="sumPocket" class="value">0</p></div>
-          <div><p class="label">Total Expenses</p><p id="sumExpenses" class="value">0</p></div>
-          <div><p class="label">Impulsive Expenses</p><p id="sumImpulsive" class="value">0</p></div>
-          <div><p class="label">Remaining Balance</p><p id="sumBalance" class="value">0</p></div>
-        </div>
-      </div>
-
-      <!-- Add pocket money -->
-      <div class="card">
-        <h2>Add Pocket Money</h2>
-        <p id="allowanceHint" class="muted"></p>
-        <form id="incomeForm" novalidate>
-          <label for="incAmount">Amount (Rs)</label>
-          <input id="incAmount" type="number" min="1" step="any" inputmode="decimal" required>
-          <label for="incDate">Date</label>
-          <input id="incDate" type="date" required>
-          <label for="incNote">Note (optional)</label>
-          <input id="incNote" type="text" maxlength="60" placeholder="e.g. Weekly top-up">
-          <p id="incError" class="error" hidden></p>
-          <button type="submit" class="btn">Add Pocket Money</button>
-        </form>
-      </div>
-
-      <!-- Add expense -->
-      <div class="card">
-        <h2>Add Expense</h2>
-        <form id="expenseForm" novalidate>
-          <label for="expAmount">Amount (Rs)</label>
-          <input id="expAmount" type="number" min="1" step="any" inputmode="decimal" required>
-          <label for="expDesc">Description / Category</label>
-          <input id="expDesc" type="text" maxlength="60" placeholder="e.g. Snacks, Transport" required>
-          <label for="expDate">Date</label>
-          <input id="expDate" type="date" required>
-          <label class="inline check">
-            <input id="expImpulsive" type="checkbox"> Impulsive / Non-essential
-          </label>
-          <p id="expError" class="error" hidden></p>
-          <button type="submit" class="btn">Add Expense</button>
-        </form>
-      </div>
-
-      <!-- Expense list -->
-      <div class="card">
-        <h2>Expenses This Month</h2>
-        <ul id="expenseList" class="list"></ul>
-      </div>
-
-      <!-- Income list -->
-      <div class="card">
-        <h2>Pocket Money Added This Month</h2>
-        <ul id="incomeList" class="list"></ul>
-      </div>
-
-      <!-- Monthly report -->
-      <div class="card">
-        <h2>Monthly Report</h2>
-        <label for="reportMonth">Choose month</label>
-        <input id="reportMonth" type="month">
-        <button type="button" id="downloadReportBtn" class="btn">Download Monthly Report</button>
-        <p class="muted small">Opens the print dialog. Choose "Save as PDF" as the destination.</p>
-      </div>
-
-    </section>
+      <p id="obError" class="error" hidden></p>
+      <button type="submit" class="btn">Start</button>
+    </form>
   </main>
 
-  <!-- ============ LETTER TO FUTURE SELF MODAL ============ -->
+  <!-- ============ MAIN APP SHELL (header + tabs + footer navigation) ============ -->
+  <div id="shell" hidden>
+
+    <!-- Header with Settings icon in the top-right corner -->
+    <header id="appHeader">
+      <h1>Pocket Money Tracker</h1>
+      <button type="button" id="settingsBtn" class="icon-btn" aria-label="Settings" title="Settings">
+        <!-- Inline SVG gear (no external icon library) -->
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="3.2"></circle>
+          <circle cx="12" cy="12" r="7"></circle>
+          <line x1="12" y1="2" x2="12" y2="5"></line>
+          <line x1="12" y1="2" x2="12" y2="5" transform="rotate(45 12 12)"></line>
+          <line x1="12" y1="2" x2="12" y2="5" transform="rotate(90 12 12)"></line>
+          <line x1="12" y1="2" x2="12" y2="5" transform="rotate(135 12 12)"></line>
+          <line x1="12" y1="2" x2="12" y2="5" transform="rotate(180 12 12)"></line>
+          <line x1="12" y1="2" x2="12" y2="5" transform="rotate(225 12 12)"></line>
+          <line x1="12" y1="2" x2="12" y2="5" transform="rotate(270 12 12)"></line>
+          <line x1="12" y1="2" x2="12" y2="5" transform="rotate(315 12 12)"></line>
+        </svg>
+      </button>
+    </header>
+
+    <!-- Negative balance warning (visible on every tab when balance < 0) -->
+    <div id="dangerBanner" class="danger-banner" role="alert" hidden></div>
+
+    <main id="app" class="page">
+
+      <!-- ===== TAB 1: HOME (Summary + Goal only) ===== -->
+      <section id="tab-home" class="tab-panel">
+
+        <section class="block">
+          <h2 id="monthTitle"></h2>
+          <div class="stat"><span>Total Pocket Money</span><strong id="sumPocket">0</strong></div>
+          <div class="stat"><span>Total Expenses</span><strong id="sumExpenses">0</strong></div>
+          <div class="stat stat-big"><span>Remaining Balance</span><strong id="sumBalance">0</strong></div>
+        </section>
+
+        <section class="block">
+          <h2>Goal</h2>
+          <p id="goalTitle" class="goal-title"></p>
+
+          <!-- Shown only while no target amount has been set -->
+          <form id="targetForm" novalidate hidden>
+            <label for="targetPrompt">How much do you want to save? (Rs)</label>
+            <input id="targetPrompt" type="number" min="1" step="any" inputmode="decimal" required>
+            <p id="targetError" class="error" hidden></p>
+            <button type="submit" class="btn">Set Target</button>
+          </form>
+
+          <!-- Shown once a target exists -->
+          <div id="goalProgress" hidden>
+            <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progressTrack">
+              <div id="progressFill" class="progress-fill"></div>
+            </div>
+            <p id="progressLabel" class="muted"></p>
+          </div>
+        </section>
+
+      </section>
+
+      <!-- ===== TAB 2: ADD POCKET MONEY ===== -->
+      <section id="tab-income" class="tab-panel" hidden>
+        <section class="block">
+          <h2>Add Pocket Money</h2>
+          <p id="allowanceHint" class="muted"></p>
+          <form id="incomeForm" novalidate>
+            <label for="incAmount">Amount (Rs)</label>
+            <input id="incAmount" type="number" min="1" step="any" inputmode="decimal" required>
+            <label for="incDate">Date</label>
+            <input id="incDate" type="date" required>
+            <label for="incNote">Note (optional)</label>
+            <input id="incNote" type="text" maxlength="60" placeholder="e.g. Weekly top-up">
+            <p id="incError" class="error" hidden></p>
+            <p id="incStatus" class="status" hidden></p>
+            <button type="submit" class="btn">Add Pocket Money</button>
+          </form>
+        </section>
+
+        <section class="block">
+          <h2>Added This Month</h2>
+          <ul id="incomeList" class="list"></ul>
+        </section>
+      </section>
+
+      <!-- ===== TAB 3: ADD EXPENSE ===== -->
+      <section id="tab-expense" class="tab-panel" hidden>
+        <section class="block">
+          <h2>Add Expense</h2>
+          <form id="expenseForm" novalidate>
+            <label for="expAmount">Amount (Rs)</label>
+            <input id="expAmount" type="number" min="1" step="any" inputmode="decimal" required>
+            <label for="expDesc">Description / Category</label>
+            <input id="expDesc" type="text" maxlength="60" placeholder="e.g. Snacks, Transport" required>
+            <label for="expDate">Date</label>
+            <input id="expDate" type="date" required>
+            <label class="inline check">
+              <input id="expImpulsive" type="checkbox"> Impulsive / Non-essential
+            </label>
+            <p id="expError" class="error" hidden></p>
+            <p id="expStatus" class="status" hidden></p>
+            <button type="submit" class="btn">Add Expense</button>
+          </form>
+        </section>
+      </section>
+
+      <!-- ===== TAB 4: EXPENSE LIST ===== -->
+      <section id="tab-list" class="tab-panel" hidden>
+        <section class="block">
+          <h2>All Expenses</h2>
+          <p id="impulsiveLine" class="muted"></p>
+          <ul id="expenseList" class="list"></ul>
+        </section>
+      </section>
+
+      <!-- ===== TAB 5: PROFILE & REPORTS ===== -->
+      <section id="tab-profile" class="tab-panel" hidden>
+        <form id="profileForm" novalidate>
+
+          <section class="block">
+            <h2>Profile</h2>
+            <label for="pfName">Your name</label>
+            <input id="pfName" type="text" maxlength="40" required>
+
+            <fieldset>
+              <legend>Allowance frequency</legend>
+              <label class="inline"><input type="radio" name="pfFrequency" value="monthly"> Monthly</label>
+              <label class="inline"><input type="radio" name="pfFrequency" value="weekly"> Weekly</label>
+              <label class="inline"><input type="radio" name="pfFrequency" value="daily"> Daily</label>
+            </fieldset>
+
+            <label for="pfAmount">Allowance amount (Rs)</label>
+            <input id="pfAmount" type="number" min="1" step="any" inputmode="decimal" required>
+          </section>
+
+          <section class="block">
+            <h2>Goal</h2>
+            <label for="pfGoal">Saving goal</label>
+            <input id="pfGoal" type="text" maxlength="60" required>
+            <label for="pfTarget">Target savings amount (Rs)</label>
+            <input id="pfTarget" type="number" min="1" step="any" inputmode="decimal" required>
+          </section>
+
+          <section class="block">
+            <h2>Letter to Future Self</h2>
+            <label for="pfLetter">What do you want to say to yourself 6 months from now?</label>
+            <textarea id="pfLetter" rows="4" maxlength="500"></textarea>
+          </section>
+
+          <p id="pfError" class="error" hidden></p>
+          <p id="pfStatus" class="status" hidden></p>
+          <button type="submit" class="btn">Save Profile</button>
+        </form>
+
+        <section class="block">
+          <h2>Monthly Report</h2>
+          <label for="reportMonth">Choose month</label>
+          <input id="reportMonth" type="month">
+          <button type="button" id="downloadReportBtn" class="btn">Download Monthly Report</button>
+          <p class="muted small">Opens the print dialog. Choose "Save as PDF" as the destination.</p>
+        </section>
+      </section>
+
+    </main>
+
+    <!-- Footer tab bar -->
+    <nav id="tabBar" aria-label="Main navigation">
+      <div class="tab-inner">
+        <button type="button" data-tab="home" class="active">Home</button>
+        <button type="button" data-tab="income">Add Money</button>
+        <button type="button" data-tab="expense">Add Expense</button>
+        <button type="button" data-tab="list">Expenses</button>
+        <button type="button" data-tab="profile">Profile</button>
+      </div>
+    </nav>
+  </div>
+
+  <!-- ============ LETTER TO FUTURE SELF MODAL (impulsive spending warning) ============ -->
   <div id="letterModal" class="modal" hidden>
-    <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="letterHeading">
+    <div class="modal-box alert" role="dialog" aria-modal="true" aria-labelledby="letterHeading">
       <h2 id="letterHeading">A note from you, 6 months ago</h2>
-      <p id="letterContext" class="muted"></p>
+      <p id="letterContext"></p>
       <blockquote id="letterText"></blockquote>
       <button type="button" id="letterCloseBtn" class="btn">I'll think again</button>
     </div>
   </div>
 
-  <!-- ============ EDIT PROFILE MODAL ============ -->
-  <div id="profileModal" class="modal" hidden>
-    <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="profileHeading">
-      <h2 id="profileHeading">Edit Profile</h2>
-      <form id="profileForm" novalidate>
-        <label for="pfName">Your name</label>
-        <input id="pfName" type="text" maxlength="40" required>
-
-        <fieldset>
-          <legend>Allowance frequency</legend>
-          <label class="inline"><input type="radio" name="pfFrequency" value="monthly"> Monthly</label>
-          <label class="inline"><input type="radio" name="pfFrequency" value="weekly"> Weekly</label>
-          <label class="inline"><input type="radio" name="pfFrequency" value="daily"> Daily</label>
-        </fieldset>
-
-        <label for="pfAmount">Allowance amount (Rs)</label>
-        <input id="pfAmount" type="number" min="1" step="any" inputmode="decimal" required>
-
-        <label for="pfGoal">Saving goal</label>
-        <input id="pfGoal" type="text" maxlength="60" required>
-
-        <label for="pfLetter">Letter to future self</label>
-        <textarea id="pfLetter" rows="4" maxlength="500"></textarea>
-
-        <p id="pfError" class="error" hidden></p>
-        <button type="submit" class="btn">Save</button>
-        <button type="button" id="profileCancelBtn" class="btn btn-secondary">Cancel</button>
-        <button type="button" id="resetBtn" class="btn btn-danger">Erase All Data</button>
+  <!-- ============ SETTINGS MODAL ============ -->
+  <div id="settingsModal" class="modal" hidden>
+    <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="settingsHeading">
+      <h2 id="settingsHeading">Settings</h2>
+      <form id="settingsForm" novalidate>
+        <label for="stThreshold">Show my letter when impulsive spending in a month goes above (Rs)</label>
+        <input id="stThreshold" type="number" min="0" step="any" inputmode="decimal" required>
+        <p id="stError" class="error" hidden></p>
+        <button type="submit" class="btn">Save Settings</button>
+        <button type="button" id="settingsCancelBtn" class="btn btn-secondary">Cancel</button>
       </form>
+      <hr>
+      <p class="muted small">Erasing removes your profile, goal, letter, pocket money and expenses from this device.</p>
+      <button type="button" id="resetBtn" class="btn btn-danger">Erase All Data</button>
     </div>
   </div>
 
